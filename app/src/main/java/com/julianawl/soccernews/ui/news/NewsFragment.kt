@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.julianawl.soccernews.MainActivity
 import com.julianawl.soccernews.databinding.FragmentNewsBinding
 import com.julianawl.soccernews.ui.adapter.NewsAdapter
 
@@ -32,6 +33,10 @@ class NewsFragment : Fragment() {
             binding.rvNews.adapter = adapter
             binding.rvNews.layoutManager = LinearLayoutManager(context)
             adapter.append(it)
+            adapter.onFavoriteClickListener = { news ->
+                val activity = activity as MainActivity
+                activity.db!!.newsDao().save(news)
+            }
         }
         return root
     }
