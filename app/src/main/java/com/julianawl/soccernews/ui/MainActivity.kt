@@ -1,20 +1,19 @@
-package com.julianawl.soccernews
+package com.julianawl.soccernews.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.room.Room
-import com.julianawl.soccernews.data.local.AppDatabase
+import com.julianawl.soccernews.R
+import com.julianawl.soccernews.data.local.SoccerNewsDb
 import com.julianawl.soccernews.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
-    var db: AppDatabase? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,16 +24,10 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_news, R.id.navigation_favorites)
+                R.id.navigation_news, R.id.navigation_favorites
+            )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         binding.mainNavView.setupWithNavController(navController)
-
-        db = Room.databaseBuilder(
-            this,
-            AppDatabase::class.java, "soccer-news"
-        )
-            .allowMainThreadQueries()
-            .build()
     }
 }

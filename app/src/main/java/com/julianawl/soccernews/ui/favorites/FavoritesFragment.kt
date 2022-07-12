@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.julianawl.soccernews.MainActivity
 import com.julianawl.soccernews.databinding.FragmentFavoritesBinding
+import com.julianawl.soccernews.ui.MainActivity
 import com.julianawl.soccernews.ui.adapter.NewsAdapter
 
 class FavoritesFragment : Fragment() {
@@ -17,32 +17,31 @@ class FavoritesFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val adapter by lazy { NewsAdapter() }
+    private var favoritesViewModel: FavoritesViewModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val favoritesViewModel =
-            ViewModelProvider(this).get(FavoritesViewModel::class.java)
+        favoritesViewModel = ViewModelProvider(this)[FavoritesViewModel::class.java]
 
         _binding = FragmentFavoritesBinding.inflate(inflater, container, false)
-        val root: View = binding.root
 
-        setupFavoriteList()
-
-        return root
-    }
-
-    private fun setupFavoriteList() {
-        val activity = activity as MainActivity
-        val favoriteNews = activity.db!!.newsDao().loadAllByFavorite(true)
         binding.rvFavorites.layoutManager = LinearLayoutManager(context)
         binding.rvFavorites.adapter = adapter
-        adapter.append(favoriteNews)
-        adapter.onFavoriteClickListener = {
-            activity.db!!.newsDao().save(it)
-            setupFavoriteList()
+        loadFavoriteNews()
+
+        return binding.root
+    }
+
+    private fun loadFavoriteNews() {
+        favoritesViewModel!!.loadFavoriteNews()?.observe(viewLifecycleOwner) { news ->
+            adapter.append(news)
+            adapter.onFavoriteClickListener = {
+                favoritesViewModel?.saveNews(it)
+                loadFavoriteNews()
+            }
         }
     }
 
