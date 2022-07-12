@@ -50,6 +50,7 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
     override fun getItemCount(): Int = news.size
 
     fun append(news: List<News>){
+        this.news.clear()
         this.news.addAll(news)
         notifyItemRangeInserted(0, news.size)
     }

@@ -6,9 +6,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.room.Room
 import com.julianawl.soccernews.R
-import com.julianawl.soccernews.data.local.SoccerNewsDb
 import com.julianawl.soccernews.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

@@ -5,21 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.julianawl.soccernews.R
 import com.julianawl.soccernews.databinding.FragmentNewsBinding
 import com.julianawl.soccernews.ui.adapter.NewsAdapter
 import com.julianawl.soccernews.utils.State
-
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class NewsFragment : Fragment() {
 
     private var _binding: FragmentNewsBinding? = null
     private val binding get() = _binding!!
-    private var newsViewModel: NewsViewModel? = null
 
+    private val newsViewModel by viewModel<NewsViewModel>()
     private val adapter by lazy { NewsAdapter() }
 
     override fun onCreateView(
@@ -27,34 +26,39 @@ class NewsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        newsViewModel = ViewModelProvider(this)[NewsViewModel::class.java]
-
-        newsViewModel?.findNews()
         _binding = FragmentNewsBinding.inflate(inflater, container, false)
-        val root: View = binding.root
 
-        binding.rvNews.layoutManager = LinearLayoutManager(context)
-
+        setNewsList()
+        findNews()
         observeNews()
         observeStates()
-        return root
+        return binding.root
+    }
+
+    private fun findNews() {
+        newsViewModel.findNews()
+    }
+
+    private fun setNewsList() {
+        binding.rvNews.layoutManager = LinearLayoutManager(context)
+        binding.rvNews.itemAnimator = null
+        binding.rvNews.adapter = adapter
     }
 
     private fun observeNews() {
-        newsViewModel!!.getNews().observe(viewLifecycleOwner) { news ->
-            binding.rvNews.adapter = adapter
+        newsViewModel.getNews().observe(viewLifecycleOwner) { news ->
             adapter.append(news)
             adapter.onFavoriteClickListener = {
-                newsViewModel?.saveNews(it)
+                newsViewModel.saveNews(it)
             }
         }
     }
 
     private fun observeStates() {
-        newsViewModel!!.getState().observe(
+        newsViewModel.getState().observe(
             viewLifecycleOwner
-        ) { state: State? ->
-            when (state) {
+        ) { state ->
+            when (state!!) {
                 State.DOING -> binding.srlNews.isRefreshing = true
                 State.DONE -> binding.srlNews.isRefreshing = false
                 State.ERROR -> {
@@ -64,7 +68,7 @@ class NewsFragment : Fragment() {
                 }
             }
         }
-        binding.srlNews.setOnRefreshListener { newsViewModel?.findNews() }
+        binding.srlNews.setOnRefreshListener { newsViewModel.findNews() }
     }
 
     override fun onDestroyView() {
