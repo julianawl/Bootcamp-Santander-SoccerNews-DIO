@@ -5,18 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.julianawl.soccernews.databinding.FragmentFavoritesBinding
 import com.julianawl.soccernews.ui.adapter.NewsAdapter
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FavoritesFragment : Fragment() {
 
     private var _binding: FragmentFavoritesBinding? = null
     private val binding get() = _binding!!
 
     private val adapter by lazy { NewsAdapter() }
-    private val favoritesViewModel by viewModel<FavoritesViewModel>()
+    private val favoritesViewModel: FavoritesViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

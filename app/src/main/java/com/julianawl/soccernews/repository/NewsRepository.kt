@@ -1,17 +1,16 @@
 package com.julianawl.soccernews.repository
 
+import com.julianawl.soccernews.data.local.NewsDAO
 import com.julianawl.soccernews.data.local.SoccerNewsDb
-import com.julianawl.soccernews.data.remote.AppRetrofit
 import com.julianawl.soccernews.data.remote.SoccerNewsApi
 import com.julianawl.soccernews.domain.News
 import retrofit2.Call
+import javax.inject.Inject
 
-class NewsRepository(
-    db: SoccerNewsDb,
-    private val remoteApi: SoccerNewsApi = AppRetrofit.create()
+class NewsRepository @Inject constructor(
+    private val dao: NewsDAO,
+    private val remoteApi: SoccerNewsApi
 ) {
-
-    private val dao = db.newsDao()
 
     fun loadAllNews(): Call<List<News>> {
         return remoteApi.getNews()

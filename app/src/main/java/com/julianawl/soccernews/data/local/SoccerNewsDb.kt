@@ -10,21 +10,4 @@ const val dbName = "soccer-news"
 @Database(entities = [News::class], version = 1)
 abstract class SoccerNewsDb : RoomDatabase() {
     abstract fun newsDao(): NewsDAO
-
-    companion object{
-        @Volatile
-        private var INSTANCE: SoccerNewsDb? = null
-
-        fun getDatabase(context: Context): SoccerNewsDb {
-            return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    SoccerNewsDb::class.java,
-                    dbName
-                ).build()
-                INSTANCE = instance
-                instance
-            }
-        }
-    }
 }

@@ -5,20 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.julianawl.soccernews.R
 import com.julianawl.soccernews.databinding.FragmentNewsBinding
 import com.julianawl.soccernews.ui.adapter.NewsAdapter
 import com.julianawl.soccernews.utils.State
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class NewsFragment : Fragment() {
 
     private var _binding: FragmentNewsBinding? = null
     private val binding get() = _binding!!
 
-    private val newsViewModel by viewModel<NewsViewModel>()
+    private val newsViewModel: NewsViewModel by viewModels()
     private val adapter by lazy { NewsAdapter() }
 
     override fun onCreateView(

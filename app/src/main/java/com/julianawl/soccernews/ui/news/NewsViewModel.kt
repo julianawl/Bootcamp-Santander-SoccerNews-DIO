@@ -7,12 +7,18 @@ import androidx.lifecycle.viewModelScope
 import com.julianawl.soccernews.domain.News
 import com.julianawl.soccernews.repository.NewsRepository
 import com.julianawl.soccernews.utils.State
+import dagger.assisted.Assisted
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class NewsViewModel(private val repository: NewsRepository) : ViewModel() {
+@HiltViewModel
+class NewsViewModel @Inject constructor(
+    private val repository: NewsRepository) :
+    ViewModel() {
 
     private val news: MutableLiveData<List<News>> = MutableLiveData()
     private val state: MutableLiveData<State> = MutableLiveData()

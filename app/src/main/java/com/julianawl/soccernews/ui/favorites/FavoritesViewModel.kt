@@ -6,12 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.julianawl.soccernews.domain.News
 import com.julianawl.soccernews.repository.NewsRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
-class FavoritesViewModel(private val repository: NewsRepository) : ViewModel() {
+@HiltViewModel
+class FavoritesViewModel @Inject constructor(private val repository: NewsRepository) : ViewModel() {
 
-    private val favoriteNews : MutableLiveData<List<News>> = MutableLiveData()
+    private val favoriteNews: MutableLiveData<List<News>> = MutableLiveData()
 
     fun loadFavoriteNews() {
         viewModelScope.launch {
